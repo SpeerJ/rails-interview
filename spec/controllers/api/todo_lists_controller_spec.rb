@@ -9,6 +9,7 @@ describe Api::TodoListsController do
   ] }
 
   describe 'GET index' do
+
     context 'when format is HTML' do
       # I changed this test to expect the correct error code from the controller
       # This allows us consistency between tests and actual usage
@@ -61,6 +62,28 @@ describe Api::TodoListsController do
         expect(response.content_type).to include('application/json')
       end
     end
+
+    context 'with invalid parameters' do
+      let(:invalid_params) { { todo_list: { } } } # name is null: false
+
+      it 'does not create a new TodoList' do
+        expect {
+          post :create, params: invalid_params, as: :json
+        }.not_to change(TodoList, :count)
+      end
+    end
+
+    context 'when todo_list parameter is missing' do
+      let(:missing_param_payload) { { some_other_key: { name: 'Test' } } }
+
+      it 'returns a 400 Bad Request status with error in JSON' do
+        post :create, params: missing_param_payload, as: :json
+        expect(response).to have_http_status(:bad_request)
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response['error']).to include("param is missing or the value is empty: todo_list")
+        expect(response.content_type).to include('application/json')
+      end
+    end
   end
 
   describe 'PATCH #update' do
@@ -103,6 +126,18 @@ describe Api::TodoListsController do
         expect(response).to have_http_status(:not_found)
         parsed_response = JSON.parse(response.body)
         expect(parsed_response['error']).to eq('Resource not found')
+        expect(response.content_type).to include('application/json')
+      end
+    end
+
+    context 'when todo_list parameter is missing' do
+      let(:missing_param_payload) { { id: todo_lists.first.id, some_other_key: { name: 'Test' } } }
+
+      it 'returns a 400 Bad Request status with error in JSON' do
+        patch :update, params: missing_param_payload, as: :json
+        expect(response).to have_http_status(:bad_request)
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response['error']).to include("param is missing or the value is empty: todo_list")
         expect(response.content_type).to include('application/json')
       end
     end
@@ -151,6 +186,7 @@ describe Api::TodoListsController do
         expect(response).to have_http_status(:internal_server_error)
         parsed_response = JSON.parse(response.body)
         expect(parsed_response['error']).to eq('Internal Server Error')
+        # In a test environment, details should be present
         expect(parsed_response['details']).to eq('Something unexpected happened')
         expect(response.content_type).to include('application/json')
       end
