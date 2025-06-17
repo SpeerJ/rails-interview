@@ -1,6 +1,8 @@
 module Api
   class TodoListsController < ApiController
-   # GET /api/todo_lists
+    before_action :set_todo_item, only: [:update, :destroy]
+
+    # GET /api/todo_lists
     def index
       @todo_lists = TodoList.all
       render json: @todo_lists
@@ -19,8 +21,6 @@ module Api
 
     # PATCH/PUT /api/todo_lists
     def update
-      @todo_list = TodoList.find(params[:id])
-
       if @todo_list.update(todo_list_params)
         render json: @todo_list, status: :ok
       else
@@ -30,13 +30,20 @@ module Api
 
     # DESTROY /api/todo_lists/:id
     def destroy
-      @todo_list = TodoList.find(params[:id])
-
       if @todo_list.destroy
         head :no_content
       else
         render json: { error: "Could not destroy resource" }, status: :unprocessable_entity
       end
+    end
+    private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_todo_item
+      @todo_list = TodoList.find(params[:id])
+    end
+
+    def todo_list_params
+      params.require(:todo_list).permit(:name)
     end
   end
 end

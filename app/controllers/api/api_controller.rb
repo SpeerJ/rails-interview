@@ -5,13 +5,10 @@ module Api
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
     rescue_from ActionController::ParameterMissing, with: :render_parameter_missing_response
     rescue_from ActionController::UnknownFormat, with: :render_unacceptable_format_response
+    rescue_from ActiveRecord::StatementInvalid, with: :render_constraint_error_response
     before_action :check_json_content_type
 
     private
-
-    def todo_list_params
-      params.require(:todo_list).permit(:name)
-    end
 
     def render_not_found_response
       render json: { error: "Resource not found" }, status: :not_found
@@ -35,6 +32,10 @@ module Api
 
     def render_unacceptable_format_response
       render json: { error: "Not Acceptable", details: "The requested format is not supported. Please request 'application/json'." }, status: :not_acceptable
+    end
+
+    def render_constraint_error_response(exception)
+      render json: { error: "Constraint Violation", details: exception.message }, status: :unprocessable_entity
     end
 
     def check_json_content_type

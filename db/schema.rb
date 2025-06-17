@@ -12,18 +12,18 @@
 
 ActiveRecord::Schema[7.0].define(version: 2025_06_16_195015) do
   create_table "todo_items", force: :cascade do |t|
-    t.integer "todo_lists_id", null: false
-    t.string "title"
+    t.integer "todo_list_id", null: false
+    t.string "title", null: false
     t.string "description"
     t.datetime "completion"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["todo_lists_id"], name: "index_todo_items_on_todo_lists_id"
+    t.index ["todo_list_id"], name: "index_todo_items_on_todo_list_id"
   end
 
   create_table "todo_lists", force: :cascade do |t|
     t.string "name", null: false
   end
 
-  add_foreign_key "todo_items", "todo_lists", column: "todo_lists_id"
+  add_foreign_key "todo_items", "todo_lists"
 end
