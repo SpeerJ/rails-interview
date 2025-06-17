@@ -3,8 +3,10 @@ module Api
     skip_before_action :verify_authenticity_token
     rescue_from StandardError, with: :render_internal_server_error_response # Catch-all for other errors
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+    rescue_from ActionController::UnknownFormat, with: :render_unacceptable_format_response
+    before_action :check_json_content_type
 
-    # GET /api/todo_lists
+                                # GET /api/todo_lists
     def index
       @todo_lists = TodoList.all
       render json: @todo_lists
@@ -67,6 +69,20 @@ module Api
       end
 
       render json: error_response, status: :internal_server_error
+    end
+
+    def render_unacceptable_format_response
+      render json: { error: "Not Acceptable", details: "The requested format is not supported. Please request 'application/json'." }, status: :not_acceptable
+    end
+
+    def check_json_content_type
+      unless request.content_type == 'application/json'
+        render json: {
+          error: "Unsupported Media Type",
+          details: "Please ensure Content-Type header is 'application/json' for endpoints under /api"
+        }, status: :unsupported_media_type
+        return false # false prevents continued processing
+      end
     end
   end
 end
