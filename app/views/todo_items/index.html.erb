@@ -1,13 +1,11 @@
 <p style="color: green"><%= notice %></p>
-<%= turbo_frame_tag "todo" do %>
-  <h1>Todo items</h1>
+<h1>Todo items</h1>
 
-  <div id="todo_items">
-    <% @todo_items.each do |todo_item| %>
-      <%= turbo_frame_tag dom_id(todo_item) do %>
-        <%= render todo_item %>
-      <% end %>
-    <% end %>
-  </div>
-  <%= link_to "New todo item", new_todo_list_item_path %>
+<%= render 'index', todo_items: @todo_items %>
+
+<%= render 'new' %>
+
+<%= form_with(url: toggle_all_completed_todo_list_todo_items_path(@todo_list), method: :patch) do |form| %>
+  <%= check_box_tag 'complete_all', '1', @all_completed, onchange: 'this.form.requestSubmit()' %>
+  <%= form.label 'complete_all', 'Complete All' %>
 <% end %>

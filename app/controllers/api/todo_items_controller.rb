@@ -20,7 +20,7 @@ module Api
       @todo_item = @todo_list.todo_items.build(todo_item_params)
 
       if @todo_item.save
-        render json: @todo_item, status: :created, location: api_todo_list_item_url(@todo_list, @todo_item)
+        render json: @todo_item, status: :created, location: api_todo_list_todo_item_url(@todo_list, @todo_item)
       else
         render json: @todo_item.errors, status: :unprocessable_entity
       end

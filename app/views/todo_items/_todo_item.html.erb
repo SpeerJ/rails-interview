@@ -1,11 +1,13 @@
 <div id="<%= dom_id todo_item %>" class="todo-item-line">
   <span class="todo-item-checkbox">
-    <%= form_with(model: [@todo_list, todo_item], url: toggle_completion_todo_list_item_path(@todo_list, todo_item), method: :patch) do |form| %>
+    <%= form_with(model: [@todo_list, todo_item], url: toggle_completion_todo_list_todo_item_path(@todo_list, todo_item), method: :patch) do |form| %>
       <%= check_box_tag 'completed', '1', todo_item.completed?, onchange: 'this.form.requestSubmit()', class: 'todo-item-checkbox' %>
     <% end %>
   </span>
   <span class="todo-item-title"><strong>Title: </strong><%= todo_item.title %></span>
   <span class="todo-item-description"><strong>Description:</strong> <%= todo_item.description %></span>
-  <span class="todo-item-completion"><strong>Completion:</strong> <%= todo_item.completion %></span>
-  <%= link_to "Edit todo item", edit_todo_list_item_path(@todo_list, todo_item) %>
+  <% if todo_item.completion.present? %>
+    <span class="todo-item-completion"><strong>Completion:</strong> <%= todo_item.completion %></span>
+  <% end %>
+  <%= link_to "Edit", edit_todo_list_todo_item_path(@todo_list, todo_item) %>
 </div>

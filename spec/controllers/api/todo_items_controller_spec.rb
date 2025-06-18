@@ -84,7 +84,7 @@ RSpec.describe Api::TodoItemsController, type: :controller do
 
       it 'sets the Location header to the URL of the created todo item' do
         post :create, as: :json, params: { todo_list_id: todo_list.id, todo_item: valid_attributes }
-        expect(response.headers['Location']).to eq(api_todo_list_item_url(todo_list, TodoItem.last))
+        expect(response.headers['Location']).to eq(api_todo_list_todo_item_url(todo_list, TodoItem.last))
       end
     end
 

@@ -1,0 +1,9 @@
+<%= turbo_frame_tag "todo_items" do %>
+  <div id="todo_items">
+    <% todo_items.each do |todo_item| %>
+      <%= turbo_frame_tag dom_id(todo_item) do %>
+        <%= render todo_item %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

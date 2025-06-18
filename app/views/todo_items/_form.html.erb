@@ -1,32 +1,29 @@
-<%= form_with(model: [@todo_list, @todo_item], url: todo_list_items_path) do |form| %>
-  <% if todo_item.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(todo_item.errors.count, "error") %> prohibited this todo_item from being saved:</h2>
+<%= turbo_frame_tag 'todo_item_form' do %>
+  <%= form_with(model: [@todo_list, @todo_item]) do |form| %>
+    <% if todo_item.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(todo_item.errors.count, "error") %> prohibited this todo_item from being saved:</h2>
 
-      <ul>
-        <% todo_item.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
+        <ul>
+          <% todo_item.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <span>
+      <strong>Title: </strong>
+      <%= form.text_field :title %>
+    </span>
+
+    <span>
+      <strong>Description: </strong>
+      <%= form.text_area :description %>
+    </span>
+
+    <span>
+      <%= form.submit %>
+    </span>
   <% end %>
-
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
-  </div>
-
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_area :description %>
-  </div>
-
-  <div>
-    <%= form.label :completion, style: "display: block" %>
-    <%= form.datetime_field :completion %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
 <% end %>

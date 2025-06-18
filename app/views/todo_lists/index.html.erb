@@ -1,15 +1,11 @@
 
-<%= turbo_frame_tag "todo" do %>
-  <%= link_to 'Add Todo List', new_todo_list_path %>
+<%= link_to 'Add Todo List', new_todo_list_path %>
 
-  <div>
-    <% @todo_lists.each do |todo_list| %>
-      <div>
-        #<%= todo_list.id %> | <%= todo_list.name %>
-        | <%= link_to "View Todo Items", todo_list_items_path(todo_list) %>
-      </div>
-    <% end %>
-  </div>
-<% end %>
-
-<%= turbo_frame_tag "todo_list_items" %>
+<div>
+  <% @todo_lists.each do |todo_list| %>
+    <div>
+      #<%= todo_list.id %> | <%= todo_list.name %>
+      | <%= link_to "View Todo Items", todo_list_todo_items_path(todo_list) %>
+    </div>
+  <% end %>
+</div>
