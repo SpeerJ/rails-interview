@@ -1,6 +1,6 @@
 class TodoItemsController < ApplicationController
   before_action :set_todo_list
-  before_action :set_todo_item, only: %i[ show edit update destroy ]
+  before_action :set_todo_item, only: %i[ show edit update destroy toggle_completion]
 
   # GET /todo_items or /todo_items.json
   def index
@@ -53,6 +53,16 @@ class TodoItemsController < ApplicationController
     respond_to do |format|
       format.turbo_stream { render turbo_stream: turbo_stream.remove(@todo_item)}
       format.html { redirect_to todo_items_url, notice: "Todo item was successfully destroyed." }
+    end
+  end
+
+  # PATCH /todo_items/1/toggle_completion
+  def toggle_completion
+    @todo_item.update(completion: @todo_item.completed? ? nil : Time.current)
+
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace(@todo_item)}
+      format.html { redirect_to @todo_list }
     end
   end
 

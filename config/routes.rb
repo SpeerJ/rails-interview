@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   end
 
   resources :todo_lists, only: %i[index new] do
-    resources :todo_items, as: :items
+    resources :todo_items, as: :items do
+      member do
+        patch :toggle_completion
+      end
+    end
   end
 
   root 'todo_lists#index'
