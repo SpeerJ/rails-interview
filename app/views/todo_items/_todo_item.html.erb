@@ -1,22 +1,6 @@
-<div id="<%= dom_id todo_item %>">
-  <p>
-    <strong>Todo lists:</strong>
-    <%= todo_item.todo_lists_id %>
-  </p>
-
-  <p>
-    <strong>Title:</strong>
-    <%= todo_item.title %>
-  </p>
-
-  <p>
-    <strong>Description:</strong>
-    <%= todo_item.description %>
-  </p>
-
-  <p>
-    <strong>Completion:</strong>
-    <%= todo_item.completion %>
-  </p>
-
+<div id="<%= dom_id todo_item %>" class="todo-item-line">
+  <span><strong>Title: </strong> <%= todo_item.title %></span>
+  <span><strong>Description:</strong> <%= todo_item.description %></span>
+  <span><strong>Completion:</strong> <%= todo_item.completion %></span>
+  <%= link_to "Edit todo item", edit_todo_list_item_path(id: todo_item.id) %>
 </div>

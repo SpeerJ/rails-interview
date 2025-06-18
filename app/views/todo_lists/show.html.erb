@@ -1,0 +1,11 @@
+<%= turbo_frame_tag "todo_list_items" do %>
+  <h2> <%= @todo_list.name %> </h2>
+
+  <%= link_to "New todo item", new_todo_list_item_path(@todo_list), data: { turbo_frame: "new_todo_item" } %>
+  <%= turbo_frame_tag "new_todo_item" %>
+  <div id="todo_items">
+    <% @todo_items.each do |todo_item| %>
+      <%= render todo_item %>
+    <% end %>
+  </div>
+<% end %>
