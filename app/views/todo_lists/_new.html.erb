@@ -1,3 +1,8 @@
 <%= turbo_frame_tag('todo_list_form') do %>
-  <%= link_to 'Add Todo List', new_todo_list_path %>
+  <div class="mt-4">
+    <%= link_to '➕ Add Todo List',
+                new_todo_list_path,
+                class: "flex items-center font-semibold text-lg text-gray-800 justify-between p-4 bg-white rounded shadow-sm border border-gray-200"
+    %>
+  </div>
 <% end %>

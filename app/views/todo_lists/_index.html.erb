@@ -1,8 +1,17 @@
 <%= turbo_frame_tag 'todo_lists' do %>
-  <% todo_lists.each do |todo_list| %>
-    <div>
-      #<%= todo_list.id %> | <%= todo_list.name %>
-      | <%= link_to "View Todo Items", todo_list_todo_items_path(todo_list), data: { turbo: "true", turbo_frame: "_top" }  %>
-    </div>
-  <% end %>
+  <div class="space-y-4">
+    <% todo_lists.each do |todo_list| %>
+      <div class="flex items-center justify-between p-4 bg-white rounded shadow-sm border border-gray-200">
+        <div>
+          <span class="text-gray-500 text-xs mr-2">#<%= todo_list.id %></span>
+          <span class="font-semibold text-lg text-gray-800"><%= todo_list.name %></span>
+        </div>
+        <div>
+          <%= link_to "View Todo Items", todo_list_todo_items_path(todo_list), 
+              class: "text-blue-600 hover:underline font-medium text-sm",
+              data: { turbo: "true", turbo_frame: "_top" }  %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 <% end %>

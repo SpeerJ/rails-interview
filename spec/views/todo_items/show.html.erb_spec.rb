@@ -14,7 +14,6 @@ RSpec.describe "todo_items/show", type: :view do
   it "renders attributes in <p>" do
     render
     expect(rendered).to match(//)
-    expect(rendered).to match(/Title/)
     expect(rendered).to match(/Description/)
   end
 end

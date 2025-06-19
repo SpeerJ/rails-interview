@@ -15,7 +15,7 @@ RSpec.describe "TodoLists", type: :system do
     # Click on the list name or a link to view items (adjust selector as needed)
     click_on "View Todo Items"
 
-    expect(page).to have_content("Todo items")
+    expect(page).to have_content("Todo Items")
     expect(page).to have_content("Take out trash")
     expect(page).to have_content("Evening chore")
   end
@@ -27,7 +27,7 @@ RSpec.describe "TodoLists", type: :system do
 
     within('form#new_todo_list, form[action="/todo_lists"]') do
       fill_in 'todo_list[name]', with: 'Shopping'
-      click_on 'Create Todo list'
+      click_on 'Save'
     end
 
     expect(page).to have_content('Shopping')
