@@ -1,17 +1,22 @@
 <%= turbo_frame_tag 'todo_lists' do %>
-  <div class="space-y-4">
+  <div class="space-y-4 w-200">
     <% todo_lists.each do |todo_list| %>
+      <%= turbo_frame_tag dom_id todo_list do %>
       <div class="flex items-center justify-between p-4 bg-white rounded shadow-sm border border-gray-200">
         <div>
           <span class="text-gray-500 text-xs mr-2">#<%= todo_list.id %></span>
           <span class="font-semibold text-lg text-gray-800"><%= todo_list.name %></span>
         </div>
-        <div>
-          <%= link_to "View Todo Items", todo_list_todo_items_path(todo_list), 
-              class: "text-blue-600 hover:underline font-medium text-sm",
-              data: { turbo: "true", turbo_frame: "_top" }  %>
+        <div class="justify-end">
+          <%= link_to "View Todo Items", todo_list_todo_items_path(todo_list),
+                      class: "ml-5 mr-5 text-blue-600 hover:underline font-medium text-sm",
+                      data: { turbo: "true", turbo_frame: "_top" } %>
+          <%= form_with(model: todo_list, method: :delete, class: "inline") do |f| %>
+            <%= f.submit "Delete", class: "ml-2 hover:underline text-blue-600 font-medium text-sm bg-transparent border-0 cursor-pointer" %>
+          <% end %>
         </div>
       </div>
+      <% end %>
     <% end %>
   </div>
 <% end %>

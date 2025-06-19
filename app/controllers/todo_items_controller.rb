@@ -74,7 +74,11 @@ class TodoItemsController < ApplicationController
     @todo_item.update(completed_at: @todo_item.completed? ? nil : Time.current)
 
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace(@todo_item) }
+      format.turbo_stream {
+        @todo_items = @todo_list.todo_items
+        # replace everything to avoid issue with padding
+        render turbo_stream: turbo_stream.replace("todo_items", partial: "todo_items/index", locals: { todo_items: @todo_items } )
+      }
       format.html { redirect_to @todo_list }
     end
   end

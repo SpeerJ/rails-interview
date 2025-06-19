@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :todo_lists, only: %i[index new create] do
+  resources :todo_lists, only: %i[index new create destroy] do
     resources :todo_items do
       member do
         patch :toggle_completion

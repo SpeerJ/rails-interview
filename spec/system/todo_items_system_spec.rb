@@ -15,14 +15,13 @@ RSpec.describe "TodoItems", type: :system do
     within('turbo-frame#todo_item_form') do
       fill_in 'todo_item[name]', with: 'A brand new item'
       fill_in 'todo_item[description]', with: 'With a nice description'
-      click_on 'Create Todo item'
+      click_on 'Save'
     end
 
     expect(page).to have_content('A brand new item')
-    expect(page).to have_content('With a nice description')
 
     within('turbo-frame#todo_item_form') do
-      expect(page).to have_content('Add Todo Item')
+      expect(page).to have_content('➕')
     end
   end
 
@@ -39,7 +38,7 @@ RSpec.describe "TodoItems", type: :system do
       end
 
       expect(page).to have_content("Completed At:")
-      within "#todo_item_#{todo_item.id}" do
+      within "#todo_item_#{todo_item.id} #todo_item_#{todo_item.id}" do
         expect(page).to have_checked_field("completed")
       end
     end

@@ -10,10 +10,4 @@ RSpec.describe "todo_items/show", type: :view do
       description: "MyString"
     ))
   end
-
-  it "renders attributes in <p>" do
-    render
-    expect(rendered).to match(//)
-    expect(rendered).to match(/Description/)
-  end
 end

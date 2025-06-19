@@ -1,11 +1,21 @@
 class TodoListsController < ApplicationController
-  before_action :set_todo_list, only: %i[show]
+  before_action :set_todo_list, only: %i[show destroy]
 
   # GET /todo_lists
   def index
     @todo_lists = TodoList.all
 
     respond_to :html
+  end
+
+  # DELETE /todo_list/1
+  def destroy
+    @todo_list.destroy
+
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(@todo_list) }
+      format.html { redirect_to todo_lists_path, notice: "Todo List was successfully destroyed." }
+    end
   end
 
   def show
