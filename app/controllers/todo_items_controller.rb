@@ -82,7 +82,8 @@ class TodoItemsController < ApplicationController
   # PATCH /todo_list/1/todo_items/toggle_completion
   def toggle_all_completed
     @all_were_completed = !@todo_list.todo_items.exists?(completed_at: nil)
-    @todo_list.todo_items.where(completed_at: nil).update_all(completed_at: @all_were_completed ? nil : Time.current)
+    items_to_change = @all_were_completed ? @todo_list.todo_items : @todo_list.todo_items.where(completed_at: nil)
+    items_to_change.update_all(completed_at: @all_were_completed ? nil : Time.current)
 
     @todo_items = @todo_list.todo_items
     respond_to do |format|

@@ -4,7 +4,7 @@
       <%= check_box_tag 'completed', '1', todo_item.completed?, onchange: 'this.form.requestSubmit()', class: 'todo-item-checkbox' %>
     <% end %>
   </span>
-  <span class="todo-item-title"><strong>Title: </strong><%= todo_item.name %></span>
+  <span class="todo-item-title"><strong>Name: </strong><%= todo_item.name %></span>
   <span class="todo-item-description"><strong>Description:</strong> <%= todo_item.description %></span>
   <% if todo_item.completed_at.present? %>
     <span class="todo-item-completion"><strong>Completed At:</strong> <%= todo_item.completed_at %></span>

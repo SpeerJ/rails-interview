@@ -1,3 +1,3 @@
 <%= turbo_frame_tag 'todo_item_form' do %>
-  <%= link_to "Add Todo Item", new_todo_list_todo_item_path %>
+  <%= link_to "Add Todo Item", new_todo_list_todo_item_path(todo_list_id: @todo_list) %>
 <% end %>

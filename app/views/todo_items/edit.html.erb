@@ -1,11 +1,11 @@
 <h1>Editing todo item</h1>
 <%= turbo_frame_tag dom_id(@todo_item) do %>
-  <%= render "form", todo_item: @todo_item %>
+  <%= render "form", todo_list: @todo_list, todo_item: @todo_item %>
 <% end %>
 
 <br>
 
 <div>
   <%= link_to "Show this todo item", todo_list_todo_items_path(@todo_item.id) %> |
-  <%= link_to "Back to todo items", todo_list_todo_items_path %>
+  <%= link_to "Back to todo items", todo_list_todo_items_path(@todo_list) %>
 </div>
