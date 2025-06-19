@@ -22,14 +22,30 @@ class TodoListsController < ApplicationController
   def create
     @todo_list = TodoList.new(todo_list_params)
 
-    if @todo_list.save
-      redirect_to todo_lists_path, notice: 'Todo list created successfully'
-    else
-      render :new
+    respond_to do |format|
+      if @todo_list.save
+        format.html { redirect_to todo_lists_path, notice: 'Todo list created successfully' }
+        format.turbo_stream {
+          render turbo_stream: [
+            turbo_stream.replace(
+            "todo_lists",
+            partial: "todo_lists/index",
+            locals: { todo_lists: TodoList.all } ),
+            turbo_stream.replace("todo_list_form", partial: "todo_lists/new")
+          ]
+        }
+      else
+        format.html { render :new }
+        format.turbo_stream { render :new }
+      end
     end
   end
 
   private
+  def todo_list_params
+    params.require(:todo_list).permit(:name)
+  end
+
   def set_todo_list
     @todo_list = TodoList.find(params[:id])
   end

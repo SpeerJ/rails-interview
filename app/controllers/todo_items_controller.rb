@@ -28,6 +28,7 @@ class TodoItemsController < ApplicationController
     respond_to do |format|
       if @todo_item.save
         format.turbo_stream do
+          # Update the index with the new val, replace the new form with the link to add a new item
           render turbo_stream:
                   [
                     turbo_stream.replace(
@@ -81,7 +82,7 @@ class TodoItemsController < ApplicationController
   # PATCH /todo_list/1/todo_items/toggle_completion
   def toggle_all_completed
     @all_were_completed = !@todo_list.todo_items.exists?(completion: nil)
-    @todo_list.todo_items.update_all(completion: @all_were_completed ? nil : Time.current)
+    @todo_list.todo_items.where(completion: nil).update_all(completion: @all_were_completed ? nil : Time.current)
 
     @todo_items = @todo_list.todo_items
     respond_to do |format|

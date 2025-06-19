@@ -1,0 +1,11 @@
+<%= turbo_frame_tag "todo_list_form" do %>
+  <%= form_with(model: @todo_list) do |form| %>
+    <span>
+      <strong>Name: </strong>
+      <%= form.text_field :name %>
+    </span>
+    <span>
+      <%= form.submit %>
+    </span>
+  <% end %>
+<% end %>
