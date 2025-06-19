@@ -9,11 +9,11 @@ RSpec.describe Api::TodoItemsController, type: :controller do
   describe 'GET #index' do
     context 'when todo items exist for the specified todo list' do
 
-      let!(:todo_item1) { todo_list.todo_items.create(title: 'Run Rails cmd line', description: 'run it') }
-      let!(:todo_item2) { todo_list.todo_items.create(title: 'Run Rails', description: 'bin/rails dev') }
+      let!(:todo_item1) { todo_list.todo_items.create(name: 'Run Rails cmd line', description: 'run it') }
+      let!(:todo_item2) { todo_list.todo_items.create(name: 'Run Rails', description: 'bin/rails dev') }
 
       let!(:another_todo_list) { TodoList.create(name: 'Create a todo list endpoint')  }
-      let!(:todo_item_from_another_list) { another_todo_list.todo_items.create(title: 'Run Generator', description: 'bin/rails generate TodoList')}
+      let!(:todo_item_from_another_list) { another_todo_list.todo_items.create(name: 'Run Generator', description: 'bin/rails generate TodoList')}
 
       before { get :index, as: :json, params: { todo_list_id: todo_list.id } }
 
@@ -30,7 +30,7 @@ RSpec.describe Api::TodoItemsController, type: :controller do
         expect(json_response.map { |item| item['id'] }).not_to include(todo_item_from_another_list.id)
 
         # Basic check for structure
-        expect(json_response.first['title']).to eq(todo_item1.title)
+        expect(json_response.first['name']).to eq(todo_item1.name)
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe Api::TodoItemsController, type: :controller do
     context 'with valid parameters' do
       # Use FactoryBot's attributes_for to get a hash of valid attributes
       # Removed todo_lists_id from valid_attributes as it's passed via the URL for nested resources
-      let(:valid_attributes) { { title: 'Valid title', description: 'Valid description' } }
+      let(:valid_attributes) { { name: 'Valid name', description: 'Valid description' } }
 
       it 'creates a new TodoItem' do
         expect {
@@ -77,7 +77,7 @@ RSpec.describe Api::TodoItemsController, type: :controller do
       it 'returns the created todo item in JSON format' do
         post :create, as: :json, params: { todo_list_id: todo_list.id, todo_item: valid_attributes }
         json_response = JSON.parse(response.body)
-        expect(json_response['title']).to eq(valid_attributes[:title])
+        expect(json_response['name']).to eq(valid_attributes[:name])
         expect(json_response['description']).to eq(valid_attributes[:description])
         expect(json_response['todo_list_id']).to eq(todo_list.id)
       end
@@ -89,7 +89,7 @@ RSpec.describe Api::TodoItemsController, type: :controller do
     end
 
     context 'with invalid parameters' do
-      let(:invalid_attributes) { { title: nil, description: 'Valid description' } }
+      let(:invalid_attributes) { { name: nil, description: 'Valid description' } }
 
       it 'does not create a new TodoItem' do
         expect {
@@ -104,7 +104,7 @@ RSpec.describe Api::TodoItemsController, type: :controller do
     end
 
     context 'when the todo list does not exist' do
-      let(:valid_attributes) { { title: 'Valid title', description: 'Valid description' } }
+      let(:valid_attributes) { { name: 'Valid name', description: 'Valid description' } }
       it 'returns a 404 Not Found status' do
         expect {
           post :create, as: :json, params: { todo_list_id: -1, todo_item: valid_attributes }
@@ -116,18 +116,18 @@ RSpec.describe Api::TodoItemsController, type: :controller do
 
   # Test suite for PUT #update
   describe 'PUT #update' do
-    let!(:todo_item) { todo_list.todo_items.create(title: 'Test item', description: 'Test description') }
+    let!(:todo_item) { todo_list.todo_items.create(name: 'Test item', description: 'Test description') }
 
     context 'with valid parameters' do
-      let(:new_attributes) { { title: 'Updated Title', description: 'Updated Description', completion: Time.current } }
+      let(:new_attributes) { { name: 'Updated Title', description: 'Updated Description', completed_at: Time.current } }
 
       before { put :update, as: :json, params: { todo_list_id: todo_list.id, id: todo_item.id, todo_item: new_attributes } }
 
       it 'updates the requested todo item' do
         todo_item.reload # Reload the object to get the updated attributes from the database
-        expect(todo_item.title).to eq('Updated Title')
+        expect(todo_item.name).to eq('Updated Title')
         expect(todo_item.description).to eq('Updated Description')
-        expect(todo_item.completion).to be_within(1.second).of(Time.current)
+        expect(todo_item.completed_at).to be_within(1.second).of(Time.current)
       end
 
       it 'returns a 200 OK status' do
@@ -137,19 +137,19 @@ RSpec.describe Api::TodoItemsController, type: :controller do
       it 'returns the updated todo item in JSON format' do
         json_response = JSON.parse(response.body)
         expect(json_response['id']).to eq(todo_item.id)
-        expect(json_response['title']).to eq('Updated Title')
+        expect(json_response['name']).to eq('Updated Title')
       end
     end
 
     context 'with invalid parameters' do
-      let(:invalid_attributes) { { title: nil } }
+      let(:invalid_attributes) { { name: nil } }
 
       before { put :update, as: :json, params: { todo_list_id: todo_list.id, id: todo_item.id, todo_item: invalid_attributes } }
 
       it 'does not update the todo item' do
-        original_title = todo_item.title
+        original_name = todo_item.name
         todo_item.reload
-        expect(todo_item.title).to eq(original_title)
+        expect(todo_item.name).to eq(original_name)
       end
 
       it 'returns a 422 Unprocessable Entity status' do
@@ -158,7 +158,7 @@ RSpec.describe Api::TodoItemsController, type: :controller do
     end
 
     context 'when the todo item does not exist' do
-      let(:new_attributes) { { title: 'Updated Title' } }
+      let(:new_attributes) { { name: 'Updated Title' } }
 
       before { put :update, as: :json, params: { todo_list_id: todo_list.id, id: -1, todo_item: new_attributes } }
 
@@ -169,8 +169,8 @@ RSpec.describe Api::TodoItemsController, type: :controller do
 
     context 'when the todo item exists but does not belong to the specified todo list' do
       let!(:another_todo_list) { TodoList.create(name: 'Another List for Update Test') }
-      let!(:todo_item_from_another_list) { another_todo_list.todo_items.create(title: 'Item for update from another list', description: 'desc') }
-      let(:new_attributes) { { title: 'Updated Title from wrong list' } }
+      let!(:todo_item_from_another_list) { another_todo_list.todo_items.create(name: 'Item for update from another list', description: 'desc') }
+      let(:new_attributes) { { name: 'Updated Title from wrong list' } }
 
       before { put :update, as: :json, params: { todo_list_id: todo_list.id, id: todo_item_from_another_list.id, todo_item: new_attributes } }
 
@@ -181,7 +181,7 @@ RSpec.describe Api::TodoItemsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:todo_item) { todo_list.todo_items.create(title: 'Test item', description: 'Test description') }
+    let!(:todo_item) { todo_list.todo_items.create(name: 'Test item', description: 'Test description') }
 
     it 'destroys the requested todo item' do
       expect {
@@ -210,7 +210,7 @@ RSpec.describe Api::TodoItemsController, type: :controller do
 
     context 'when the todo item exists but does not belong to the specified todo list' do
       let!(:another_todo_list) { TodoList.create(name: 'Another List for Destroy Test') }
-      let!(:todo_item_from_another_list) { another_todo_list.todo_items.create(title: 'Item for delete from another list', description: 'desc') }
+      let!(:todo_item_from_another_list) { another_todo_list.todo_items.create(name: 'Item for delete from another list', description: 'desc') }
 
       it 'returns a 404 Not Found status (due to scoping)' do
         expect {

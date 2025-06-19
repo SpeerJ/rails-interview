@@ -5,7 +5,7 @@ class TodoItemsController < ApplicationController
   # GET /todo_list/1/todo_items
   def index
     @todo_items = @todo_list.todo_items
-    @all_completed = !@todo_items.exists?(completion: nil)
+    @all_completed = !@todo_items.exists?(completed_at: nil)
   end
 
   # GET /todo_list/1/todo_items/1
@@ -71,7 +71,7 @@ class TodoItemsController < ApplicationController
 
   # PATCH /todo_list/1/todo_items/1/toggle_completion
   def toggle_completion
-    @todo_item.update(completion: @todo_item.completed? ? nil : Time.current)
+    @todo_item.update(completed_at: @todo_item.completed? ? nil : Time.current)
 
     respond_to do |format|
       format.turbo_stream { render turbo_stream: turbo_stream.replace(@todo_item) }
@@ -81,8 +81,8 @@ class TodoItemsController < ApplicationController
 
   # PATCH /todo_list/1/todo_items/toggle_completion
   def toggle_all_completed
-    @all_were_completed = !@todo_list.todo_items.exists?(completion: nil)
-    @todo_list.todo_items.where(completion: nil).update_all(completion: @all_were_completed ? nil : Time.current)
+    @all_were_completed = !@todo_list.todo_items.exists?(completed_at: nil)
+    @todo_list.todo_items.where(completed_at: nil).update_all(completed_at: @all_were_completed ? nil : Time.current)
 
     @todo_items = @todo_list.todo_items
     respond_to do |format|
@@ -105,6 +105,6 @@ class TodoItemsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def todo_item_params
-    params.require(:todo_item).permit(:todo_lists_id, :title, :description, :completion)
+    params.require(:todo_item).permit(:todo_lists_id, :name, :description, :completed_at)
   end
 end

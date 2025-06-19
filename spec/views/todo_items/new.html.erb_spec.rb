@@ -4,7 +4,7 @@ RSpec.describe "todo_items/new", type: :view do
   before(:each) do
     assign(:todo_item, TodoItem.new(
       todo_lists: nil,
-      title: "MyString",
+      name: "MyString",
       description: "MyString"
     ))
   end
@@ -16,7 +16,7 @@ RSpec.describe "todo_items/new", type: :view do
 
       assert_select "input[name=?]", "todo_item[todo_lists_id]"
 
-      assert_select "input[name=?]", "todo_item[title]"
+      assert_select "input[name=?]", "todo_item[name]"
 
       assert_select "input[name=?]", "todo_item[description]"
     end

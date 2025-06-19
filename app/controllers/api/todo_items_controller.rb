@@ -49,7 +49,7 @@ module Api
     end
 
     def todo_item_params
-      params.require(:todo_item).permit(:title, :description, :completion, :todo_list_id)
+      params.require(:todo_item).permit(:name, :description, :completed_at, :todo_list_id)
     end
   end
 

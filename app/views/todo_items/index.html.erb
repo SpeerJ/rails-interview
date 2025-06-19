@@ -9,3 +9,5 @@
   <%= check_box_tag 'complete_all', '1', @all_completed, onchange: 'this.form.requestSubmit()' %>
   <%= form.label 'complete_all', 'Complete All' %>
 <% end %>
+
+<%= link_to "Back to todo lists", todo_lists_path %>

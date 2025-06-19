@@ -4,10 +4,10 @@
       <%= check_box_tag 'completed', '1', todo_item.completed?, onchange: 'this.form.requestSubmit()', class: 'todo-item-checkbox' %>
     <% end %>
   </span>
-  <span class="todo-item-title"><strong>Title: </strong><%= todo_item.title %></span>
+  <span class="todo-item-title"><strong>Title: </strong><%= todo_item.name %></span>
   <span class="todo-item-description"><strong>Description:</strong> <%= todo_item.description %></span>
-  <% if todo_item.completion.present? %>
-    <span class="todo-item-completion"><strong>Completion:</strong> <%= todo_item.completion %></span>
+  <% if todo_item.completed_at.present? %>
+    <span class="todo-item-completion"><strong>Completed At:</strong> <%= todo_item.completed_at %></span>
   <% end %>
   <%= link_to "Edit", edit_todo_list_todo_item_path(@todo_list, todo_item) %>
 </div>

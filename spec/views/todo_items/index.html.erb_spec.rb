@@ -5,12 +5,12 @@ RSpec.describe "todo_items/index", type: :view do
     assign(:todo_items, [
       TodoItem.create!(
         todo_lists: nil,
-        title: "Title",
+        name: "Title",
         description: "Description"
       ),
       TodoItem.create!(
         todo_lists: nil,
-        title: "Title",
+        name: "Title",
         description: "Description"
       )
     ])

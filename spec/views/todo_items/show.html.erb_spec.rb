@@ -4,7 +4,7 @@ RSpec.describe "todo_items/show", type: :view do
   before(:each) do
     assign(:todo_item, TodoItem.create!(
       todo_lists: nil,
-      title: "Title",
+      name: "Title",
       description: "Description"
     ))
   end
